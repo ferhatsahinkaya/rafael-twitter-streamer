@@ -24,7 +24,7 @@ internal class ServiceTest {
     }
 
     @Test
-    fun test() {
+    fun shouldCallStreamFilterPath() {
         val values = listOf("tweet-${nextLong()}", "tweet-${nextLong()}", "tweet-${nextLong()}")
 
         wireMockServer.stubFor(post(urlMatching(OAUTH_PATH))
@@ -56,10 +56,10 @@ internal class ServiceTest {
     }
 
     companion object {
-        val STREAM_FILTER_PATH = "/resource-path-${nextLong()}"
-        val OAUTH_PATH = "/oauth-path-${nextLong()}"
-        val TOKEN_TYPE = "token-type-${nextLong()}"
-        val TOKEN_VALUE = "token-value-${nextLong()}"
-        val BEARER_TOKEN = "bearer-token-${nextLong()}"
+        private val STREAM_FILTER_PATH = "/resource-path-${nextLong()}"
+        private val OAUTH_PATH = "/oauth-path-${nextLong()}"
+        private val TOKEN_TYPE = "token-type-${nextLong()}"
+        private val TOKEN_VALUE = "token-value-${nextLong()}"
+        private val BEARER_TOKEN = "bearer-token-${nextLong()}"
     }
 }
