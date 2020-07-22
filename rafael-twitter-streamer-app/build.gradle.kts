@@ -22,6 +22,7 @@ dependencies {
     }
     testImplementation("com.github.tomakehurst:wiremock:2.27.1")
     testImplementation("org.awaitility:awaitility-kotlin:4.0.3")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.1")
 }
 
 tasks {

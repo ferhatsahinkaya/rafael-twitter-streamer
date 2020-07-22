@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.codec.json.Jackson2JsonDecoder
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.client.ExchangeStrategies
+import org.springframework.web.reactive.function.client.ExchangeStrategies.builder
 import org.springframework.web.reactive.function.client.WebClient
 
 @Component
@@ -31,7 +31,7 @@ class Service(@Value("\${twitter.base-url}") val baseUrl: String,
 
     private fun token() = WebClient
             .builder()
-            .exchangeStrategies(ExchangeStrategies.builder()
+            .exchangeStrategies(builder()
                     .codecs { it.defaultCodecs().jackson2JsonDecoder(Jackson2JsonDecoder(ObjectMapper().configure(FAIL_ON_UNKNOWN_PROPERTIES, false))) }
                     .build())
             .baseUrl(baseUrl)
