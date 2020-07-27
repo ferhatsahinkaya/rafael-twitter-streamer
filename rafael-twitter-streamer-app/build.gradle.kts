@@ -13,6 +13,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.kafka:spring-kafka")
     implementation("org.springframework:spring-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -23,6 +24,7 @@ dependencies {
     testImplementation("com.github.tomakehurst:wiremock:2.27.1")
     testImplementation("org.awaitility:awaitility-kotlin:4.0.3")
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.1")
+    testImplementation("net.mguenther.kafka:kafka-junit:2.5.0")
 }
 
 tasks {

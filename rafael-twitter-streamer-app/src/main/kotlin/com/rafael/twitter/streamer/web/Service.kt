@@ -3,6 +3,8 @@ package com.rafael.twitter.streamer.web
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.ProducerRecord
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.codec.json.Jackson2JsonDecoder
@@ -14,9 +16,16 @@ import org.springframework.web.reactive.function.client.WebClient
 class Service(@Value("\${twitter.base-url}") val baseUrl: String,
               @Value("\${twitter.stream-filter-path}") val streamFilterPath: String,
               @Value("\${twitter.oauth-path}") val oauthPath: String,
-              @Value("\${twitter.bearer-token}") val bearerToken: String) {
+              @Value("\${twitter.bearer-token}") val bearerToken: String,
+              @Value("\${kafka.broker-list}") val brokerList: String) {
 
     init {
+        val producerConfig = mapOf(
+                "key.serializer" to "org.apache.kafka.common.serialization.StringSerializer",
+                "value.serializer" to "org.apache.kafka.common.serialization.StringSerializer",
+                "bootstrap.servers" to brokerList)
+        val producer = KafkaProducer<String, String>(producerConfig)
+
         WebClient.create(baseUrl)
                 .get()
                 .uri(streamFilterPath)
@@ -24,7 +33,9 @@ class Service(@Value("\${twitter.base-url}") val baseUrl: String,
                 .header("Authorization", token().let { "${it.type} ${it.value}" })
                 .retrieve()
                 .bodyToFlux(String::class.java)
+                .filter { it.trim().isNotEmpty() }
                 .subscribe {
+                    producer.send(ProducerRecord("tweet-stream", it))
                     println("Tweet received: $it")
                 }
     }
