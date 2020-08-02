@@ -18,7 +18,7 @@ class Service(@Value("\${twitter.base-url}") val baseUrl: String,
               @Value("\${twitter.oauth-path}") val oauthPath: String,
               @Value("\${twitter.bearer-token}") val bearerToken: String,
               @Value("\${kafka.broker-list}") val brokerList: String,
-              @Value("\${twitter.stream-topic}") val topicName: String) {
+              @Value("\${kafka.stream-topic}") val topicName: String) {
 
     init {
         val producerConfig = mapOf(

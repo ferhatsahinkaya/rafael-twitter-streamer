@@ -5,3 +5,4 @@ twitter:
   bearer-token: ${BEARER_TOKEN},
 kafka:
   broker-list: ${BROKER_LIST}
+  stream-topic: ${STREAM_TOPIC}
