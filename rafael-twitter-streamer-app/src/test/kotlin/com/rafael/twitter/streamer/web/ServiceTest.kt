@@ -35,6 +35,7 @@ internal class ServiceTest {
     private val tokenType = "token-type-${nextLong()}"
     private val tokenValue = "token-value-${nextLong()}"
     private val bearerToken = "bearer-token-${nextLong()}"
+    private val topicName = "tweet-stream-${nextLong()}"
     private val jsonBuilder = json()
             .modulesToInstall(KotlinModule())
             .build<ObjectMapper>()
@@ -79,7 +80,7 @@ internal class ServiceTest {
                             .withHeader("Content-Type", APPLICATION_JSON_VALUE)
                             .withBody(tweets.joinToString(separator = "\n"))))
 
-            Service(wireMockServer.baseUrl(), streamFilterPath, oauthPath, bearerToken, kafkaCluster.brokerList)
+            Service(wireMockServer.baseUrl(), streamFilterPath, oauthPath, bearerToken, kafkaCluster.brokerList, topicName)
 
             wireMockServer.verify(postRequestedFor(urlMatching(oauthPath))
                     .withHeader("Accept", equalTo(APPLICATION_JSON_VALUE))
@@ -90,7 +91,7 @@ internal class ServiceTest {
                         .withHeader("Accept", equalTo(APPLICATION_JSON_VALUE))
                         .withHeader("Authorization", equalTo("$tokenType $tokenValue")))
 
-                assertThat(kafkaCluster.readValues(from("tweet-stream").useDefaults()), expectedTweetsMatcher)
+                assertThat(kafkaCluster.readValues(from(topicName).useDefaults()), expectedTweetsMatcher)
             }
         }
 

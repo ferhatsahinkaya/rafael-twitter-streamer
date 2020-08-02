@@ -17,7 +17,8 @@ class Service(@Value("\${twitter.base-url}") val baseUrl: String,
               @Value("\${twitter.stream-filter-path}") val streamFilterPath: String,
               @Value("\${twitter.oauth-path}") val oauthPath: String,
               @Value("\${twitter.bearer-token}") val bearerToken: String,
-              @Value("\${kafka.broker-list}") val brokerList: String) {
+              @Value("\${kafka.broker-list}") val brokerList: String,
+              @Value("\${twitter.stream-topic}") val topicName: String) {
 
     init {
         val producerConfig = mapOf(
@@ -35,8 +36,9 @@ class Service(@Value("\${twitter.base-url}") val baseUrl: String,
                 .bodyToFlux(String::class.java)
                 .filter { it.trim().isNotEmpty() }
                 .subscribe {
-                    producer.send(ProducerRecord("tweet-stream", it))
-                    println("Tweet received: $it")
+                    it
+                            .apply { producer.send(ProducerRecord(topicName, this)) }
+                            .apply { println("Published tweet content $this to topic $topicName") }
                 }
     }
 
