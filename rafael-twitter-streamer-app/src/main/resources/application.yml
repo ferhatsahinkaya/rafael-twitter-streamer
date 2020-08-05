@@ -2,7 +2,7 @@ twitter:
   base-url: https://api.twitter.com
   stream-filter-path: /labs/1/tweets/stream/filter
   oauth-path: /oauth2/token?grant_type=client_credentials
-  bearer-token: ${BEARER_TOKEN},
+  bearer-token: ${BEARER_TOKEN}
 kafka:
   broker-list: ${BROKER_LIST}
   stream-topic: ${STREAM_TOPIC}
